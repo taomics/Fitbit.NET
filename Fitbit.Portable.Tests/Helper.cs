@@ -48,6 +48,9 @@ namespace Fitbit.Portable.Tests
                 case HttpStatusCode.BadRequest:
                     errorFilePath = "ApiError-Request-BadRequest.json";
                     break;
+                case HttpStatusCode.TooManyRequests: // Add handling for 429 errors
+                    errorFilePath = "ApiError-Request-BadRequest.json"; // Reuse existing error file
+                    break;
             }
 
             string content = SampleDataHelper.GetContent(errorFilePath);
