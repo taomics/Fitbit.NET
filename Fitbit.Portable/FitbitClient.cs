@@ -2026,23 +2026,38 @@ namespace Fitbit.Api.Portable
         {
             if (!response.IsSuccessStatusCode)
             {
-                // assumption is error response from fitbit in the 4xx range  
-                var errors = new JsonDotNetSerializer().ParseErrors(await response.Content.ReadAsStringAsync());
+                List<ApiError> errors = [];
 
                 // rate limit hit
-                if (429 == (int)response.StatusCode)
+                if (response.StatusCode == HttpStatusCode.TooManyRequests)
                 {
-                    // not sure if we can use 'RetryConditionHeaderValue' directly as documentation is minimal for the header
-                    var retryAfterHeader = response.Headers.GetValues("Retry-After").FirstOrDefault();
+                    int retryAfter = 3600; // default value (1 hour)
+
+                    // see https://dev.fitbit.com/build/reference/web-api/developer-guide/application-design/#Rate-Limits
+                    var retryAfterHeader = response.Headers.GetValues("Fitbit-Rate-Limit-Reset").FirstOrDefault();
                     if (retryAfterHeader != null)
                     {
-                        int retryAfter;
-                        if (int.TryParse(retryAfterHeader, out retryAfter))
+                        if (!int.TryParse(retryAfterHeader, out retryAfter))
                         {
-                            throw new FitbitRateLimitException(retryAfter, errors);
+                            errors.Add(new ApiError
+                            {
+                                Message = $"Fitbit-Rate-Limit-Reset has invalid value: {retryAfterHeader}",
+                            });
                         }
                     }
+                    else
+                    {
+                        errors.Add(new ApiError
+                        {
+                            Message = $"Fitbit-Rate-Limit-Reset header not found",
+                        });
+                    }
+
+                    throw new FitbitRateLimitException(retryAfter, errors);
                 }
+
+                // assumption is error response from fitbit in the 4xx range
+                errors = new JsonDotNetSerializer().ParseErrors(await response.Content.ReadAsStringAsync());
 
                 // request exception parsing
                 switch (response.StatusCode)
