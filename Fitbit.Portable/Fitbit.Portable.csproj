@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Platforms>AnyCPU;x64</Platforms>
+		<NoWarn>$(NoWarn);CS0168;CS0618</NoWarn>
 	</PropertyGroup>
   
   <ItemGroup>
