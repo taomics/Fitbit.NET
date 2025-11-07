@@ -1574,6 +1574,10 @@ namespace Fitbit.Api.Portable
                     return "1sec";
                 case HeartRateResolution.oneMinute:
                     return "1min";
+                case HeartRateResolution.fiveMinute:
+                    return "5min";
+                case HeartRateResolution.fifteenMinute: // not deprecated yet.
+                    return "15min";
                 default:
                     return "1min";
             }
@@ -1628,6 +1632,30 @@ namespace Fitbit.Api.Portable
             string apiCall = FitbitClientHelperExtensions.ToFullUrl(apiPath);
 
             return await ProcessHeartRateIntradayTimeSeries(date, apiCall);
+        }
+
+        /// <summary>
+        /// Requests the Intraday Heart Rate Time Series for a specific date.
+        /// </summary>
+        /// <param name="date">The start date and time of series.</param>
+        /// <param name="resolution">Number of data points to include.</param>
+        /// <param name="encodedUserId">Optional: Encoded id of the user.</param>
+        /// <returns></returns>
+        public async Task<string> GetHeartRateIntradayAsStringV1(DateTime date, HeartRateResolution resolution, string encodedUserId = "-")
+        {
+            string resolutionText = GetHeartRateResolution(resolution);
+
+            string apiPath = $"1/user/{encodedUserId}/activities/heart/date/{date:yyyy-MM-dd}/{date:yyyy-MM-dd}/{resolutionText}/time/00:00:00/23:59:59.json";
+            string apiCall = FitbitClientHelperExtensions.ToFullUrl(apiPath);
+
+            using (HttpRequestMessage request = GetRequest(HttpMethod.Get, apiCall))
+            {
+                using (HttpResponseMessage response = await HttpClient.SendAsync(request, CancellationToken))
+                {
+                    await HandleResponse(response);
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
         }
 
         #endregion

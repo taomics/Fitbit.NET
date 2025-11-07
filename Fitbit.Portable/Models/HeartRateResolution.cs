@@ -6,7 +6,8 @@ namespace Fitbit.Models
     {
         oneSecond = 1,
         oneMinute = 2,
+        fiveMinute = 3,
         [Obsolete("No longer supported by Fitbit.")]
-        fifteenMinute = 3
+        fifteenMinute = 4
     }
 }
