@@ -88,7 +88,7 @@ namespace Fitbit.Api.Portable
         /// GetTimeSeriesDataList has to do some custom manipulation with the returned representation
         /// </summary>
         /// <param name="serializer"></param>
-        /// <param name="timeSeriesDataJson"></param>
+        /// <param name="heartRateIntradayJson"></param>
         /// <returns></returns>
         internal static HeartActivitiesIntraday GetHeartRateIntraday(this JsonDotNetSerializer serializer, DateTime date, string heartRateIntradayJson)
         {
