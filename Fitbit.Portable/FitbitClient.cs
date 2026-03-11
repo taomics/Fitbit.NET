@@ -88,7 +88,7 @@ namespace Fitbit.Api.Portable
         /// </summary>
         /// <param name="credentials">Obtain this information from your developer dashboard. App credentials are required to perform token refresh</param>
         /// <param name="accessToken">Authenticate with Fitbit API using OAuth2. Authenticator2 class is a helper for this process</param>
-        /// <param name="interceptor">An interface that enables sniffing all outgoing and incoming http requests from FitbitClient</param>
+        /// <param name="interceptors">An interface that enables sniffing all outgoing and incoming http requests from FitbitClient</param>
         public FitbitClient(FitbitAppCredentials credentials, OAuth2AccessToken accessToken, List<IFitbitInterceptor> interceptors, bool enableOAuth2TokenRefresh = true,
             ITokenManager tokenManager = null, HttpClient httpClient = null, CancellationToken cancellationToken = default)
         {

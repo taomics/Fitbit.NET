@@ -99,7 +99,6 @@ namespace Fitbit.Api.Portable
         /// <summary>
         /// Creates the processing request pipeline using the message handlers
         /// </summary>
-        /// <param name="authorization"></param>
         /// <param name="interceptors"></param>
         /// <returns></returns>
         internal static HttpMessageHandler CreatePipeline(this FitbitClient client, List<IFitbitInterceptor> interceptors)
