@@ -56,10 +56,17 @@ namespace Fitbit.Api.Portable
                 return default(T);
             }
 
-            T result = string.IsNullOrWhiteSpace(RootProperty) ? token.ToObject<T>(_jsonSerializer) : token[RootProperty].ToObject<T>(_jsonSerializer);
+            if (!string.IsNullOrWhiteSpace(RootProperty))
+            {
+                var rootToken = token[RootProperty];
+                if (rootToken == null)
+                {
+                    return default(T);
+                }
+                return rootToken.ToObject<T>(_jsonSerializer);
+            }
 
-            // T result = string.IsNullOrWhiteSpace(RootProperty) ? token.ToObject<T>(_jsonSerializer) : token[RootProperty].ToObject<T>(_jsonSerializer);
-            return result;
+            return token.ToObject<T>(_jsonSerializer);
         }
     }
 }
