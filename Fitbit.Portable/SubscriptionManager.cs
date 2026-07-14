@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -13,6 +14,7 @@ namespace Fitbit.Api.Portable
 
     public class SubscriptionManager
     {
+        [RequiresUnreferencedCode("XmlSerializer requires preserving serialized type members when trimming.")]
         public List<UpdatedResource> ProcessUpdateReponseBody(string bodyContent)
         {
 
